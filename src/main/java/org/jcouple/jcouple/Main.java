@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.cup.jcoup;
+package org.jcouple.jcouple;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -24,7 +24,7 @@ public class Main implements Runnable {
     @Override
     public void run() {
         try {
-            File f = new File("C:\\Users\\caner\\Documents\\NetBeansProjects\\jcup\\src\\test\\java\\org\\cup\\jcup\\Simple.java");
+            File f = new File("src\\test\\java\\org\\jcouple\\jcouple\\test\\Simple.java");
             CompilationUnit cu = StaticJavaParser.parse(f);
             Writer w = new PrintWriter(System.out);
             TemplatesContext tc = new TemplatesContext(w, true);

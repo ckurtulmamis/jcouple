@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.cup.jcoup;
+package org.jcouple.jcouple;
 
+import com.github.javaparser.ast.Modifier;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
@@ -141,6 +142,17 @@ public class TemplatesContext {
             return proxy;
         }
     }
+    private Modifier modifier = null;
+    public void ifScopeNot(Modifier m, Runnable r){
+        if(modifier == null ? m != null : !modifier.getKeyword().equals(m.getKeyword())){
+            r.run();
+            this.modifier = m;
+        }
+    }
+
+    public FunctionTemplates getFunctions() {
+        return functions;
+    }
 
     private class WrapperTemplatesHandler implements InvocationHandler {
 
@@ -149,12 +161,20 @@ public class TemplatesContext {
         public WrapperTemplatesHandler() throws IOException {
         }
 
+        private Runnable emptyRunnable = new Runnable() {
+            @Override
+            public void run() {
+                throw new UnsupportedOperationException("Unexpected Delegate"); //To change body of generated methods, choose Tools | Templates.
+            }
+        };
+        
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            
             Consumer mm = mustaches.get(method, () -> {
                 return methods(method.getName());
             });
-            final Runnable delegate = (Runnable) args[0];
+            final Runnable delegate = args == null ? emptyRunnable : (Runnable) args[0];
             delegates.addFirst(delegate);
             mm.accept(basics);
             Runnable res = delegates.pollFirst();
@@ -211,7 +231,7 @@ public class TemplatesContext {
         return basics;
     }
 
-    public SeperatorTemplates getSeperators() {
+    public SeperatorTemplates<Runnable> getSeperators() {
         return seperators;
     }
 

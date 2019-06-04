@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.cup.jcoup;
+package org.jcouple.jcouple;
 
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -60,8 +61,30 @@ public class HeaderVisitor<T extends TemplatesContext> extends VoidVisitorAdapte
     }
 
     @Override
+    public void visit(Modifier n, T arg) {
+        if (n.equals(Modifier.staticModifier())) {
+            arg.getBasics().keywordStatic();
+            arg.getFunctions().seperator();
+        }
+        if(n.equals(Modifier.privateModifier())){
+            arg.ifScopeNot(n, () -> {
+                arg.getWrappers().scopePrivate();
+            });
+        }else if(n.equals(Modifier.protectedModifier())){
+            arg.ifScopeNot(n, () -> {
+                arg.getWrappers().scopeProtected();
+            });
+        }else if(n.equals(Modifier.publicModifier())){
+            arg.ifScopeNot(n, () -> {
+                arg.getWrappers().scopePublic();
+            });
+        }
+        super.visit(n, arg); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
     public void visit(VariableDeclarator n, T arg) {
-        
+
         arg.getWrappers().variableDeclarationType(() -> {
             n.getType().accept(this, arg);
         });
@@ -103,8 +126,6 @@ public class HeaderVisitor<T extends TemplatesContext> extends VoidVisitorAdapte
         });*/
         //super.visit(n, arg); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
 
     @Override
     public void visit(PrimitiveType n, T arg) {
@@ -114,10 +135,14 @@ public class HeaderVisitor<T extends TemplatesContext> extends VoidVisitorAdapte
 
     @Override
     public void visit(FieldDeclaration n, T arg) {
-        n.getModifiers().forEach(p -> p.accept(this, arg));
-        n.getVariables().forEach(p -> p.accept(this, arg));
-        n.getAnnotations().forEach(p -> p.accept(this, arg));
-        n.getComment().ifPresent(l -> l.accept(this, arg));
+        arg.getSeperators().fieldKeywordsSeperator((Runnable) () -> {
+            n.getModifiers().forEach(p -> p.accept(this, arg));
+            n.getVariables().forEach(p -> p.accept(this, arg));
+        });
+        
+        /*n.getAnnotations().forEach(p -> p.accept(this, arg));
+
+        n.getComment().ifPresent(l -> l.accept(this, arg));*/
 
         //super.visit(n, arg); //To change body of generated methods, choose Tools | Templates.
     }

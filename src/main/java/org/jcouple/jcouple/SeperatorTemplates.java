@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.cup.jcoup;
+package org.jcouple.jcouple;
 
 import com.github.javaparser.ast.Node;
 import java.util.function.Consumer;
@@ -12,8 +12,10 @@ import java.util.function.Consumer;
  *
  * @author caner
  */
-public interface SeperatorTemplates {
-    void classExtendSeperator(Runnable r);
-    void classImplementSeperator(Runnable r);
-    void variableTemplateSeperator(Runnable r);
+public interface SeperatorTemplates<T> {
+    void classExtendSeperator(T r);
+    void classImplementSeperator(T r);
+    void variableTemplateSeperator(T r);
+    void methodKeywordsSeperator(T r);
+    void fieldKeywordsSeperator(T r);
 }

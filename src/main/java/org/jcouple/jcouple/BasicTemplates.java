@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.cup.jcoup;
+package org.jcouple.jcouple;
 
 /**
  *
@@ -27,4 +27,10 @@ public interface BasicTemplates {
     BasicTemplates keywordCurlyClose();
     
     BasicTemplates holder();
+
+    BasicTemplates keywordStatic();
+    
+    BasicTemplates keywordPrivate();
+    BasicTemplates keywordProtected();
+    BasicTemplates keywordPublic();
 }

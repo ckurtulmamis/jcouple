@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.cup.jcoup;
+package org.jcouple.jcouple;
 
 import com.github.javaparser.ast.Node;
 
@@ -22,4 +22,8 @@ public interface WrapperTemplates {
     void classBody(Runnable r);
     void variableTemplate(Runnable r);
     void typeParameter(Runnable r);
+    
+    void scopePrivate();
+    void scopeProtected();
+    void scopePublic();
 }
